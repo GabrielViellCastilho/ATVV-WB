@@ -1,35 +1,32 @@
 import { useEffect, useState } from 'react';
 import 'materialize-css/dist/css/materialize.min.css';
 import M from 'materialize-css';
-import Servico from "../../../modelo/Servico";
+
+interface ServicoMaisConsumido {
+  id: number;
+  nome: string;
+  preco: number;
+  totalClientes: number;
+}
 
 interface Props {
   tema: string;
 }
 
-export default function ListagemTodosServicos({ tema }: Props) {
-  const [servicos, setServicos] = useState<Servico[]>([]);
+export default function ListagemServicosMaisConsumidosFeminino({ tema }: Props) {
+  const [servicos, setServicos] = useState<ServicoMaisConsumido[]>([]);
   const [erro, setErro] = useState<string | null>(null);
 
-  // Busca os serviços da API
   useEffect(() => {
-    fetch("http://localhost:3069/servicos")
+    fetch("http://localhost:3069/servicos/maisVendidosPorGenero/Feminino")
       .then((res) => {
-        if (!res.ok) throw new Error("Erro ao buscar serviços");
+        if (!res.ok) throw new Error("Erro ao buscar serviços para o gênero Feminino");
         return res.json();
       })
-      .then((data) => {
-        const lista = data.map(
-          (serv: any) => new Servico(serv.nome, serv.preco)
-        );
-        setServicos(lista);
-      })
-      .catch(() => {
-        setErro("Não foi possível carregar os serviços.");
-      });
+      .then((data) => setServicos(data))
+      .catch(() => setErro("Não foi possível carregar os serviços mais consumidos."));
   }, []);
 
-  // Inicializa o collapsible sempre que os serviços mudarem
   useEffect(() => {
     const elems = document.querySelectorAll('.collapsible');
     M.Collapsible.init(elems);
@@ -38,7 +35,9 @@ export default function ListagemTodosServicos({ tema }: Props) {
   return (
     <div className="row">
       <div className="col s10 offset-s1">
-        <h4 className="center-align blue-text text-darken-2">Lista de Serviços</h4>
+        <h4 className="center-align pink-text text-darken-2">
+          Serviços Mais Consumidos por Clientes Femininos
+        </h4>
 
         {erro && (
           <p className="red-text center-align" style={{ marginTop: '1rem' }}>
@@ -50,12 +49,13 @@ export default function ListagemTodosServicos({ tema }: Props) {
           {servicos.map((servico, index) => (
             <li key={index}>
               <div className={`collapsible-header ${tema} white-text`}>
-                <i className="material-icons">build</i>
+                <i className="material-icons">content_cut</i>
                 {servico.nome}
               </div>
               <div className="collapsible-body">
                 <p><strong>Nome:</strong> {servico.nome}</p>
                 <p><strong>Preço:</strong> R$ {servico.preco.toFixed(2)}</p>
+                <p><strong>Quantidade de Clientes:</strong> {servico.totalClientes}</p>
               </div>
             </li>
           ))}

@@ -1,77 +1,93 @@
-import { ChangeEvent, useState } from "react";
+import { useState, ChangeEvent } from "react";
 import 'materialize-css/dist/css/materialize.min.css';
-import Produto from "../../../modelo/Produto";
+import M from 'materialize-css';
+
+interface Produto {
+  id: number;
+  nome: string;
+  preco: number;
+}
 
 interface Props {
-    tema: string;
-};
-
-
-const produtosFicticios: Produto[] = [
-    new Produto("Pomada Modeladora", 45),
-    new Produto("Shampoo Masculino", 30),
-    new Produto("Condicionador", 28),
-    new Produto("Cera Capilar", 35),
-];
+  tema: string;
+}
 
 export default function BuscarProdutoPorNome({ tema }: Props) {
-    const [nomeBusca, setNomeBusca] = useState("");
-    const [resultado, setResultado] = useState<Produto | null>(null)
+  const [nomeBusca, setNomeBusca] = useState("");
+  const [produto, setProduto] = useState<Produto | null>(null);
+  const [erro, setErro] = useState("");
 
+  const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
+    setNomeBusca(event.target.value);
+    setErro("");
+    setProduto(null);
+  };
 
-    const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
-        setNomeBusca(event.target.value);
-    };
+  const buscarProduto = async () => {
+    const nomeFormatado = nomeBusca.trim();
+    if (!nomeFormatado) {
+      setErro("Digite um nome válido");
+      return;
+    }
 
-    const buscarProduto = () => {
-        const produtoEncontrado = produtosFicticios.find(
-            p => p.nome === nomeBusca
-        );
-        setResultado(produtoEncontrado || null);
-    };
+    try {
+      const response = await fetch(`http://localhost:3069/produtos/${nomeFormatado}`);
+      if (!response.ok) {
+        throw new Error("Produto não encontrado");
+      }
 
-    return (
-        <div className="container" style={{ marginTop: "40px" }}>
-            <div
-                className="z-depth-2"
-                style={{
-                    backgroundColor: "#f5f5f5",
-                    borderRadius: "10px",
-                    padding: "30px",
-                    boxShadow: "0 4px 10px rgba(0,0,0,0.1)"
-                }}
-            >
-                <h5 className={`${tema} white-text center-align`}>Buscar Produto por Nome</h5>
+      const data: Produto = await response.json();
+      setProduto(data);
+    } catch (error: any) {
+      setErro(error.message || "Erro ao buscar produto");
+    }
+  };
 
-                <div className="input-field">
-                    <input
-                        type="text"
-                        value={nomeBusca}
-                        onChange={handleChange}
-                        placeholder="Digite o nome do produto"
-                        className="validate"
-                    />
-                </div>
+  return (
+    <div className="container" style={{ marginTop: "40px" }}>
+      <div
+        className="z-depth-2"
+        style={{
+          backgroundColor: "#f5f5f5",
+          borderRadius: "10px",
+          padding: "30px",
+          boxShadow: "0 4px 10px rgba(0,0,0,0.1)"
+        }}
+      >
+        <h5 className={`${tema} white-text center-align`}>Buscar Produto por Nome</h5>
 
-                <div className="center-align">
-                    <button className={`btn ${tema}`} onClick={buscarProduto}>
-                        Buscar
-                    </button>
-                </div>
-
-                {resultado ? (
-                    <div className="card" style={{ marginTop: '1.5rem' }}>
-                        <div className={`card-content ${tema} white-text`}>
-                            <span className="card-title">{resultado.nome}</span>
-                            <p><strong>Preço:</strong> R$ {resultado.preco.toFixed(2)}</p>
-                        </div>
-                    </div>
-                ) : nomeBusca ? (
-                    <p className="center-align red-text" style={{ marginTop: '1.5rem' }}>
-                        Produto não encontrado.
-                    </p>
-                ) : null}
-            </div>
+        <div className="input-field">
+          <input
+            type="text"
+            value={nomeBusca}
+            onChange={handleChange}
+            placeholder="Digite o nome do produto"
+            className="validate"
+          />
         </div>
-    );
+
+        <div className="center-align">
+          <button className={`btn ${tema}`} onClick={buscarProduto}>
+            Buscar
+          </button>
+        </div>
+
+        {erro && (
+          <p className="center-align red-text" style={{ marginTop: '1.5rem' }}>
+            {erro}
+          </p>
+        )}
+
+        {produto && (
+          <div className="card" style={{ marginTop: '1.5rem' }}>
+            <div className={`card-content ${tema} white-text`}>
+              <span className="card-title">{produto.nome}</span>
+              <p><strong>ID:</strong> {produto.id}</p>
+              <p><strong>Preço:</strong> R$ {produto.preco.toFixed(2)}</p>
+            </div>
+          </div>
+        )}
+      </div>
+    </div>
+  );
 }

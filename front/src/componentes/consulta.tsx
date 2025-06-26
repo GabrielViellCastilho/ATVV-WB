@@ -12,9 +12,15 @@ import BuscarServicoPorNome from "./listagem/servicos/buscarServicoPorNome";
 import BuscarProdutoPorNome from "./listagem/produtos/buscarProdutoPorNome";
 import BuscarClientePorCPF from "./listagem/clientes/buscarClientePorCPF";
 import {
-  ListagemTop10ClientesMaisConsumiram,
-  ListagemTop10ClientesMenosConsumiram
+    ListagemTop10ClientesMaisConsumiram,
+    ListagemTop10ClientesMenosConsumiram
 } from "./listagem/clientes/listagemTop10Clientes";
+import ListagemProdutosMaisVendidos from "./listagem/produtos/listagemProdutosMaisVendidos";
+import ListagemProdutosMaisVendidosMasculino from "./listagem/produtos/ListagemProdutosMaisVendidosMasculino";
+import ListagemProdutosMaisVendidosFeminino from "./listagem/produtos/ListagemProdutosMaisVendidosFeminino";
+import ListagemServicosMaisVendidos from "./listagem/servicos/ListagemServicosMaisVendidos";
+import ListagemServicosMaisConsumidosMasculino from "./listagem/servicos/ListagemServicosMaisConsumidosMasculino";
+import ListagemServicosMaisConsumidosFeminino from "./listagem/servicos/ListagemServicosMaisConsumidosFeminino";
 
 interface Props {
     tema: string;
@@ -51,8 +57,20 @@ export default function Consulta(data: Props) {
                 return <ListagemClientesFemininos tema={data.tema} />;
             case "produtos":
                 return <ListagemTodosProdutos tema={data.tema} />;
+            case "produtosMaisVendidos":
+                return <ListagemProdutosMaisVendidos tema={data.tema} />
+            case "produtoMaisVendidosMasculino":
+                return <ListagemProdutosMaisVendidosMasculino tema={data.tema} />
+            case "produtoMaisVendidosFeminino":
+                return <ListagemProdutosMaisVendidosFeminino tema={data.tema} />
             case "servicos":
                 return <ListagemTodosServicos tema={data.tema} />;
+            case "servicosMaisVendidos":
+                return <ListagemServicosMaisVendidos tema={data.tema}/>
+            case "servicosMaisVendidosMasculino":
+                return <ListagemServicosMaisConsumidosMasculino tema={data.tema}/>
+            case "servicosMaisVendidosFeminino":
+                return <ListagemServicosMaisConsumidosFeminino tema={data.tema}/>
             case "buscarCliente":
                 return <BuscarClientePorCPF tema={data.tema} />;
             case "buscarServico":
@@ -90,9 +108,9 @@ export default function Consulta(data: Props) {
                     </a>
                     <ul id='dropdown-produtos' className='dropdown-content'>
                         <li><a onClick={() => setComponenteVisivel("produtos")}>Listar todos os produtos</a></li>
-                        <li><a onClick={() => setComponenteVisivel("produtos")}>Listar produtos mais vendidos</a></li>
-                        <li><a onClick={() => setComponenteVisivel("produtos")}>Listar produtos mais vendidos por gênero (Masculino)</a></li>
-                        <li><a onClick={() => setComponenteVisivel("produtos")}>Listar produtos mais vendidos por gênero (Feminino)</a></li>
+                        <li><a onClick={() => setComponenteVisivel("produtosMaisVendidos")}>Listar produtos mais vendidos</a></li>
+                        <li><a onClick={() => setComponenteVisivel("produtoMaisVendidosMasculino")}>Listar produtos mais vendidos por gênero (Masculino)</a></li>
+                        <li><a onClick={() => setComponenteVisivel("produtoMaisVendidosFeminino")}>Listar produtos mais vendidos por gênero (Feminino)</a></li>
                         <li><a onClick={() => setComponenteVisivel("buscarProduto")}>Buscar produto por nome</a></li>
                     </ul>
                 </div>
@@ -104,9 +122,9 @@ export default function Consulta(data: Props) {
                     </a>
                     <ul id='dropdown-servicos' className='dropdown-content'>
                         <li><a onClick={() => setComponenteVisivel("servicos")}>Listar todos os serviços</a></li>
-                        <li><a onClick={() => setComponenteVisivel("servicos")}>Listar serviços mais consumidos</a></li>
-                        <li><a onClick={() => setComponenteVisivel("servicos")}>Listar serviços mais consumidos por gênero (Masculino)</a></li>
-                        <li><a onClick={() => setComponenteVisivel("servicos")}>Listar serviços mais consumidos por gênero (Feminino)</a></li>
+                        <li><a onClick={() => setComponenteVisivel("servicosMaisVendidos")}>Listar serviços mais consumidos</a></li>
+                        <li><a onClick={() => setComponenteVisivel("servicosMaisVendidosMasculino")}>Listar serviços mais consumidos por gênero (Masculino)</a></li>
+                        <li><a onClick={() => setComponenteVisivel("servicosMaisVendidosFeminino")}>Listar serviços mais consumidos por gênero (Feminino)</a></li>
                         <li><a onClick={() => setComponenteVisivel("buscarServico")}>Buscar serviço por nome</a></li>
                     </ul>
                 </div>
