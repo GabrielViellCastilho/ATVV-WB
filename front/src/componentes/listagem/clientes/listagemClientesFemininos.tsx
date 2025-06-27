@@ -59,7 +59,7 @@ export default function ListagemClientesFemininos({ tema }: Props) {
   return (
     <div className="row">
       <div className="col s10 offset-s1">
-        <h4 className="center-align blue-text text-darken-2">Clientes do Gênero Feminino</h4>
+        <h4 className="center-align pink-text text-darken-2">Clientes do Gênero Feminino</h4>
         <ul className="collapsible">
           {clientes.map((cliente, index) => (
             <li key={index}>

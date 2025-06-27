@@ -8,6 +8,11 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+generator tsx_seed {
+  provider = "prisma-client-js"
+}
+
+
 model cliente {
   id           Int        @id @default(autoincrement())
   nome         String

@@ -36,6 +36,7 @@ const ListagemTodosClientes: React.FC<Props> = ({ tema }) => {
   return (
     <div className="row">
       <div className="col s10 offset-s1">
+                <h4 className="center-align blue-text text-darken-2">Lista de Clientes</h4>
         <ul className="collapsible">
           {clientes.map((cliente, index) => (
             <li key={index}>

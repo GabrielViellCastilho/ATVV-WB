@@ -69,14 +69,17 @@ export const criarCliente = async (dados: ClienteInput) => {
       cpf: {
         create: {
           valor: dados.cpf.valor,
-          dataEmissao: dados.cpf.dataEmissao
+          dataEmissao: new Date(dados.cpf.dataEmissao)
         }
       },
       rg: {
-        create: dados.rg
+        create: dados.rg?.map(r => ({
+          valor: r.valor,
+          dataEmissao: new Date(r.dataEmissao)
+        })) || []
       },
       telefone: {
-        create: dados.telefone
+        create: dados.telefone || []
       }
     },
     include: {
@@ -88,6 +91,7 @@ export const criarCliente = async (dados: ClienteInput) => {
     }
   })
 }
+
 
 export const adicionarRG = async (clienteId: number, valor: string, dataEmissao: Date) => {
   return await prisma.rg.create({
@@ -305,12 +309,32 @@ export const deletarClientePorCpf = async (cpf: string) => {
       cpf: {
         valor: cpf
       }
+    },
+    include: {
+      rg: true,
+      telefone: true,
+      produto: true,
+      servico: true
     }
-  })
+  });
 
-  if (!cliente) throw new Error("Cliente com CPF não encontrado.")
+  if (!cliente) throw new Error("Cliente com CPF não encontrado.");
 
+  // Deleta relacionamentos
+  await prisma.rg.deleteMany({ where: { clienteId: cliente.id } });
+  await prisma.telefone.deleteMany({ where: { clienteId: cliente.id } });
+
+  // Remove associações N:N com produtos e serviços
+  await prisma.cliente.update({
+    where: { id: cliente.id },
+    data: {
+      produto: { set: [] },
+      servico: { set: [] }
+    }
+  });
+
+  // Por fim, deletar o cliente
   return await prisma.cliente.delete({
     where: { id: cliente.id }
-  })
-}
+  });
+};
