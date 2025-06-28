@@ -15,12 +15,20 @@ cd back
 npm install
 ```
 
-> ⚠️ Configure o arquivo `.env` na pasta `back` com a variável `DATABASE_URL` apontando para seu banco de dados MySQL.
+> ⚠️ Configure o arquivo `.env`
+ na pasta `back` com a variável `DATABASE_URL` apontando para seu banco de dados MySQL.
+ 
+  Crie um arquivo `.env` na pasta `back` com pelo menos:
+
+```env
+DATABASE_URL="mysql://usuario:senha@localhost:3306/nome_do_banco"
+```
 
 Depois, execute as migrations e seed para criar as tabelas e popular dados iniciais:
 
 ```bash
 npx prisma migrate deploy
+npx prisma generate
 npm run seed
 ```
 
@@ -49,13 +57,6 @@ O frontend estará disponível em `http://localhost:3000` (ou a porta configurad
 ---
 
 ## ⚙️ Configurações importantes
-
-- **Variáveis de ambiente backend:**  
-  Crie um arquivo `.env` na pasta `back` com pelo menos:
-
-```env
-DATABASE_URL="mysql://usuario:senha@localhost:3306/nome_do_banco"
-```
 
 - **Portas:**  
   O backend usa a porta `3069` por padrão, e o frontend `3000`.  
