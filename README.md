@@ -4,9 +4,25 @@ Este projeto possui duas aplicações separadas
 
 ---
 
+## Pré-requisitos
+
+Antes de começar, verifique se você tem as seguintes ferramentas instaladas:
+
+- [Node.js](https://nodejs.org/) (versão recomendada: **20.x**)
+- [MySQL](https://dev.mysql.com/downloads/mysql/) (versão recomendada: **8.0.37**)
+- [Git](https://git-scm.com/)
+
+---
+
 ## 🚀 Como rodar o projeto
 
-### 1. Preparar o Backend
+### 1. Clone o repositório
+
+```bash
+git clone https://github.com/GabrielViellCastilho/ATVV-WB.git
+```
+
+### 2. Preparar o Backend
 
 Abra um terminal e siga os passos:
 
@@ -42,7 +58,7 @@ O servidor estará rodando em `http://localhost:3069` (ajuste conforme configura
 
 ---
 
-### 2. Preparar o Frontend
+### 3. Preparar o Frontend
 
 Abra outro terminal para rodar o frontend:
 
